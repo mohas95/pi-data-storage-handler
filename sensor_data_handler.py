@@ -110,12 +110,32 @@ class SQLiteDataHandler:
             
             return True, "compatible"
     
-    # TODO: 
-    def get_unsynced_readings(self,limit=50):
-        pass
+    def get_unsynced_data(self, table_name,limit=50):
+        with self.connect_db() as conn:
+            rows = conn.execute(
+                f"""
+                SELECT *
+                FROM {table_name}
+                WHERE uploaded = 0
+                ORDER BY timestamp ASC
+                LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
 
-    def mark_uploaded(self):
-        pass
+        return {"table": table_name,
+                "unsynced_data":[dict(row) for row in rows]}
+
+    def mark_uploaded(self, table_name, id):
+        with self.connect_db() as conn:
+            conn.execute(
+                f"""
+                UPDATE {table_name}
+                SET uploaded = 1
+                WHERE id = ?
+                """,
+                (id,),
+            )
 
 
 if __name__ == "__main__":
@@ -132,13 +152,21 @@ if __name__ == "__main__":
 
     sensor_handler.insert("sensor_readings", data)
 
+    unsynced_sensor_data = sensor_handler.get_unsynced_data("sensor_readings")
 
-    with sqlite3.connect(db_path) as conn:
-        conn.row_factory = sqlite3.Row
+    # print(unsynced_sensor_data)
+    for data_point in unsynced_sensor_data.get("unsynced_data"):
+        id = data_point.get("id")
 
-        rows = conn.execute(
-            "SELECT * FROM sensor_readings"
-        ).fetchall()
+        if id %2 == 1:
+            sensor_handler.mark_uploaded(unsynced_sensor_data.get("table"), id)
 
-        for row in rows:
-            print(dict(row))
+    # with sqlite3.connect(db_path) as conn:
+    #     conn.row_factory = sqlite3.Row
+
+    #     rows = conn.execute(
+    #         "SELECT * FROM sensor_readings"
+    #     ).fetchall()
+
+    #     for row in rows:
+    #         print(dict(row))
