@@ -35,7 +35,7 @@ IMAGE_CAPTURE_TABLE_CONTENT ="""
     capture_id TEXT NOT NULL,
     image_id TEXT NOT NULL,
     camera_id TEXT NOT NULL,
-    file_path TEXT NOT NULL,
+    file_name TEXT NOT NULL,
     image_type TEXT,
     width INTEGER,
     height INTEGER,
