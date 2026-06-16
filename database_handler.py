@@ -93,8 +93,29 @@ SENSOR_TABLE_CONTENT = """
     FOREIGN KEY(experiment_id) REFERENCES experiments(experiment_id)
 """
 
+## PRESET TABLES
+EXPERIMENTS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT}
 
+CAPTURE_EVENTS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+                      "capture_events" : CAPTURE_EVENTS_TABLE_CONTENT}
 
+POSE_EVENTS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+                   "capture_events" : CAPTURE_EVENTS_TABLE_CONTENT,
+                   "pose_events" : POSE_CAPTURE_TABLE_CONTENT }
+
+SENSOR_EVENTS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+                     "capture_events" : CAPTURE_EVENTS_TABLE_CONTENT,
+                     "sensor_events" : SENSOR_CAPTURE_TABLE_CONTENT }
+
+IMAGE_EVENTS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+                     "capture_events" : CAPTURE_EVENTS_TABLE_CONTENT,
+                     "image_events" : IMAGE_CAPTURE_TABLE_CONTENT }
+
+SENSORS_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+               "sensor_continuous" : SENSOR_TABLE_CONTENT }
+
+POSE_TABLE={"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
+            "pose_continuous" : POSE_TABLE_CONTENT}
 
 DEFAULT_TABLES = {"experiments" : EXPERIMENTS_META_TABLE_CONTENT,
                   "capture_events" : CAPTURE_EVENTS_TABLE_CONTENT,
